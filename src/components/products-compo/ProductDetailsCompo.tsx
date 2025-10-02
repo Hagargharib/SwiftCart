@@ -12,7 +12,7 @@ import Image from 'next/image';
 import { useCart } from '@/app/context/CartContext';
 import { addProductToCart } from '@/actions/cart.action';
 import toast from 'react-hot-toast';
-import { addToWishList, getUserWishList } from '@/actions/wishlist.action';
+import { addToWishList } from '@/actions/wishlist.action';
 import { Heart } from 'lucide-react';
 import { useWishlist } from '@/app/context/wishlistContext';
 

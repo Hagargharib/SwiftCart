@@ -59,7 +59,7 @@ export default function MainSlider() {
                     <div className="flex items-center justify-start h-full px-10">
                         <div className="text-left" data-swiper-parallax="-200">
                             <h2 className="text-green-900 text-3xl font-bold">
-                                DON'T MISS THE OFFER!
+                                DONOT MISS THE OFFER!
                             </h2>
                             <Button variant="outline" className="mt-4 text-green-900">
                                 SHOP NOW

@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
@@ -11,14 +10,14 @@ interface WishlistContextType {
     getWishlistDetails: () => Promise<void>;
     addWishlistItem: (productId: string) => Promise<void>;
     removeWishlistItem: (productId: string) => Promise<void>;
-    isInWishlist: (id: string) => boolean; // ✅ added
+    isInWishlist: (id: string) => boolean; 
 }
 
 const WishlistContext = createContext<WishlistContextType>({
     wishlistDetails: null,
-    getWishlistDetails: async () => { },
-    addWishlistItem: async () => { },
-    removeWishlistItem: async () => { },
+    getWishlistDetails: async () => {},
+    addWishlistItem: async () => {},
+    removeWishlistItem: async () => {},
     isInWishlist: () => false,
 });
 
@@ -30,7 +29,7 @@ export default function WishlistContextProvider({ children }: { children: React.
             const res = await getUserWishList();
             const products = res?.data?.data ?? res?.data ?? [];
             setWishlistDetails({ data: products, count: products?.length ?? 0 });
-        } catch (err) {
+        } catch {
             setWishlistDetails({ data: [], count: 0 });
         }
     }, []);
@@ -38,10 +37,9 @@ export default function WishlistContextProvider({ children }: { children: React.
     const addWishlistItem = async (productId: string) => {
         try {
             await addToWishList(productId);
-            await getWishlistDetails(); // ✅ refresh
+            await getWishlistDetails(); 
             toast.success("Added to wishlist");
-        } catch (err) {
-            console.error(err);
+        } catch {
             toast.error("Failed to add to wishlist");
         }
     };
@@ -51,7 +49,7 @@ export default function WishlistContextProvider({ children }: { children: React.
             await removeFromWishList(productId);
             await getWishlistDetails();
             toast.success("Removed from wishlist");
-        } catch (err) {
+        } catch {
             toast.error("Failed to remove from wishlist");
         }
     };
@@ -71,7 +69,7 @@ export default function WishlistContextProvider({ children }: { children: React.
                 getWishlistDetails,
                 addWishlistItem,
                 removeWishlistItem,
-                isInWishlist, // ✅ expose it
+                isInWishlist, 
             }}
         >
             {children}

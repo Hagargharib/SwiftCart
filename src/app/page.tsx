@@ -9,18 +9,16 @@ import { options } from "./api/auth/[...nextauth]/route";
 export default async function Home() {
   const session = await getServerSession(options);
 
-  const response = await getAllCategories();
-  const data = response?.data;
-  const {data:products} = await getAllProducts();
-  
+  const { data: categories } = await getAllCategories();
+  const { data: products } = await getAllProducts();
   
   return (
     <>
       <MainSlider />
-      <div >
-        <CategSlider category={data} />
+      <div>
+        <CategSlider category={categories} />
       </div>
-      <ProductsGrid products={products}/>
+      <ProductsGrid products={products} />
     </>
   );
 }

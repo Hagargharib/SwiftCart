@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 export default function Register() {
-    const [errorMessage, setErrorMessage] = useState(null);
+    const [errorMessage, _setErrorMessage] = useState(null);
     const [paymentMethod, setPaymentMethod] = useState<"cash" | "online" | null>(null)
     const router = useRouter();
 
@@ -36,6 +36,7 @@ export default function Register() {
                     router.push("/allorders");
                 }
             } catch (error) {
+                
             }
 
         }

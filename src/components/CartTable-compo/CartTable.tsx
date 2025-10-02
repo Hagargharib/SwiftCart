@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import React from 'react'
+import React from "react";
 import {
     Table,
     TableBody,
@@ -8,20 +8,20 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table"
-import Image from "next/image"
-import { Trash2, XCircle, Plus, Minus } from "lucide-react"
-import { useCart } from '@/app/context/CartContext'
-import { deleteProduct, UpdateProduct } from '@/actions/cart.action'
-import toast from 'react-hot-toast'
-import Link from 'next/link'
+} from "@/components/ui/table";
+import Image from "next/image";
+import { Trash2, XCircle, Plus, Minus } from "lucide-react";
+import { useCart } from "@/app/context/CartContext";
+import { deleteProduct, UpdateProduct } from "@/actions/cart.action";
+import toast from "react-hot-toast";
+import Link from "next/link";
 
 export default function CartTable() {
     const { cartDetails, getCartDetails } = useCart();
 
-    // delete product 
+    // delete product
     async function removeProductFromCart(productId: string) {
-        const response = await deleteProduct(productId);
+        await deleteProduct(productId);
         toast.success("Product deleted successfully from your cart", {
             icon: <XCircle className="text-red-600" />,
         });
@@ -30,8 +30,9 @@ export default function CartTable() {
 
     // update product
     async function updateProductFromCart(productId: string, count: number) {
-        const response = await UpdateProduct(productId, count);
-        toast.success("Product Updated successfully ");
+        if (count < 1) return;
+        await UpdateProduct(productId, count);
+        toast.success("Product updated successfully");
         await getCartDetails();
     }
 
@@ -63,11 +64,11 @@ export default function CartTable() {
                                     <TableCell>
                                         <div className="relative w-16 h-16">
                                             <Image
-                                                src={product.product.imageCover}
+                                                src={product.product.imageCover || "/placeholder.png"}
                                                 alt={product.product.title}
                                                 sizes="64px"
                                                 fill
-                                                className="rounded-md"
+                                                className="rounded-md object-cover"
                                             />
                                         </div>
                                     </TableCell>
@@ -79,8 +80,17 @@ export default function CartTable() {
                                     <TableCell className="text-center">
                                         <div className="flex items-center justify-center gap-3">
                                             <button
-                                                onClick={() => updateProductFromCart(product.product._id, product.count - 1)}
-                                                className="cursor-pointer w-8 h-8 flex items-center justify-center rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 hover:text-green-700"
+                                                onClick={() =>
+                                                    updateProductFromCart(
+                                                        product.product._id,
+                                                        product.count - 1
+                                                    )
+                                                }
+                                                disabled={product.count <= 1}
+                                                className={`cursor-pointer w-8 h-8 flex items-center justify-center rounded-full border ${product.count <= 1
+                                                        ? "text-gray-300 border-gray-200 cursor-not-allowed"
+                                                        : "border-gray-300 text-gray-600 hover:bg-gray-100 hover:text-green-700"
+                                                    }`}
                                             >
                                                 <Minus size={16} />
                                             </button>
@@ -88,7 +98,12 @@ export default function CartTable() {
                                                 {product.count}
                                             </span>
                                             <button
-                                                onClick={() => updateProductFromCart(product.product._id, product.count + 1)}
+                                                onClick={() =>
+                                                    updateProductFromCart(
+                                                        product.product._id,
+                                                        product.count + 1
+                                                    )
+                                                }
                                                 className="cursor-pointer w-8 h-8 flex items-center justify-center rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 hover:text-green-700"
                                             >
                                                 <Plus size={16} />
@@ -96,9 +111,7 @@ export default function CartTable() {
                                         </div>
                                     </TableCell>
 
-                                    <TableCell className="text-right">
-                                        ${product.price}
-                                    </TableCell>
+                                    <TableCell className="text-right">${product.price}</TableCell>
                                     <TableCell className="text-right font-semibold">
                                         ${product.price * product.count}
                                     </TableCell>
@@ -121,11 +134,9 @@ export default function CartTable() {
                             <p className="text-md font-bold text-green-900">
                                 SubTotal: ${cartDetails?.data?.totalCartPrice}
                             </p>
-                            <p className="text-md font-bold text-green-900">
-                                Shipping: $40
-                            </p>
+                            <p className="text-md font-bold text-green-900">Shipping: $40</p>
                             <p className="text-lg font-bold text-green-900">
-                                TOTAL: ${(cartDetails?.data?.totalCartPrice || 0) + 40}
+                                TOTAL: {(cartDetails?.data?.totalCartPrice || 0) + 40}
                             </p>
                             <Link href="/checkout">
                                 <button className="cursor-pointer mt-4 px-6 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 transition">
@@ -148,5 +159,5 @@ export default function CartTable() {
                 </div>
             )}
         </>
-    )
+    );
 }
