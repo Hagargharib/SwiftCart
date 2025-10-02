@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
@@ -21,8 +21,9 @@ export default function ForgetPass() {
       toast.success(res.data.message || "Verification code sent");
 
       router.push(`/verifycode?email=${encodeURIComponent(values.email)}`);
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message || "Failed to send code");
+    } catch (err: unknown) {
+      const axiosError = err as AxiosError<{ message: string }>;
+      toast.error(axiosError.response?.data?.message || "Failed to send code");
     } finally {
       setLoading(false);
     }
@@ -31,7 +32,9 @@ export default function ForgetPass() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow">
-        <h2 className="text-2xl font-bold text-center text-green-800 mb-4">Forgot Password</h2>
+        <h2 className="text-2xl font-bold text-center text-green-800 mb-4">
+          Forgot Password
+        </h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <label className="block text-sm">Email</label>

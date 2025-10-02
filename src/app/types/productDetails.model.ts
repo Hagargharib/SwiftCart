@@ -35,7 +35,7 @@ export interface ProductDetails {
     ratingsAverage: number;
     ratingsQuantity: number;
     sold: number;
-    reviews: any[]; 
+    reviews: unknown[]; 
     createdAt: string;
     updatedAt: string;
     id: string; 

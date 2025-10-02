@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 
 export default function VerifyCode() {
@@ -21,11 +21,10 @@ export default function VerifyCode() {
       );
 
       toast.success(res.data.message || "Code verified!");
-
-      // Navigate to resetpassword page
-      router.push(`/resetpass?email=${email}&resetCode=${values.code}`);
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message || "Invalid or expired code");
+      router.push(`/resetpass?email=${email}&token=${values.code}`);
+    } catch (err: unknown) {
+      const axiosErr = err as AxiosError<{ message?: string }>;
+      toast.error(axiosErr.response?.data?.message || "Invalid or expired code");
     } finally {
       setLoading(false);
     }
